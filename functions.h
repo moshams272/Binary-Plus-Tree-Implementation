@@ -9,4 +9,5 @@ void update_header(TreeHeader header);
 // دوال الشجرة الأساسية (مسؤولية الباقين)
 void insert(int key);
 int search(int key);
+void delete_key(int key);
 void print_tree();
