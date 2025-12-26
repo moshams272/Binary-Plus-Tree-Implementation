@@ -43,16 +43,20 @@ int main()
             {
                 cout << "<h3>Insert:" << key << "</h3>";
                 insert(key);
+                print_tree();
             }
             else if (opStr == "search")
             {
                 cout << "<h3>Search: " << key << "</h3>";
                 search(key);
+                print_tree();
             }
             else if (opStr == "delete")
             {
                 cout << "<h3>Delete: " << key << "</h3>";
                 delete_key(key);
+                
+                print_tree();
             }
             else
             {
