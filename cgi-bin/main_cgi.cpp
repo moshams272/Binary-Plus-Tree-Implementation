@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include "../functions.h"
 
+// val=60&op=search
 using namespace std;
 
 string getParam(string query, string key)
@@ -18,11 +19,14 @@ string getParam(string query, string key)
     return query.substr(pos, endPos - pos);
 }
 
+
 int main()
 {
+    init_tree_file();
+
     cout << "Content-Type: text/html\n\n";
 
-    cout << "<html dir='rtl'><head><meta charset='UTF-8'></head>";
+    cout << "<html dir='ltr'><head><meta charset='UTF-8'></head>";
     cout << "<body style='font-family:sans-serif; text-align:center;'>";
     cout << "<h2>The Result of Process in B+ Tree</h2>";
 
@@ -51,13 +55,6 @@ int main()
                 search(key);
                 print_tree();
             }
-            else if (opStr == "delete")
-            {
-                cout << "<h3>Delete: " << key << "</h3>";
-                delete_key(key);
-                
-                print_tree();
-            }
             else
             {
                 cout << "<p style='color:red'>Error!! <br> We Don't Know That Process!!</p>";
@@ -66,6 +63,7 @@ int main()
         else
         {
             cout << "<p>Please Fill Data</p>";
+            print_tree();
         }
     }
     else

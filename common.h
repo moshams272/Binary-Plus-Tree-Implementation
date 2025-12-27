@@ -5,34 +5,40 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// 1. ثوابت المشروع (Constants)
-#define ORDER 5             // درجة الشجرة (يمكن تغييرها لاحقاً)
-#define FILENAME "tree.dat" // اسم الملف الذي سيخزن الشجرة
+// 1. System Constants & Configuration
+#define PAGE_SIZE 4096      // Fixed page size in bytes (aligns with disk blocks)
+#define ORDER 5             // Tree Order (Branching Factor). Defines max children.
+#define FILENAME "tree.dat" // The binary file name used for persistence
 
-// 2. هيكل النود (The Node Structure)
-typedef struct
-{
-    int id;       // رقم النود في الملف (للتسهيل أثناء الـ Debugging)
-    int is_leaf;  // هل هي ورقة أم نود داخلية؟
-    int num_keys; // عدد الأرقام الموجودة حالياً في النود
+// 2. Node Structure Definition
+typedef struct {
+    int id;             // Unique Node ID (index in file). Used for referencing and debugging.
+    int is_leaf;       // Flag indicating if this is a Leaf node or an Internal node.
+    int num_keys;       // Current count of active keys in this node.
+    
+    int keys[ORDER - 1]; // Array storing the keys/values.
+    
+    // Child Pointers:
+    // - In Internal Nodes: Stores IDs of child nodes.
+    // - In Leaf Nodes: Can be used to store record pointers (depending on implementation).
+    int children[ORDER];    
+    
+    int next_leaf;      // Sibling pointer to the next leaf. Critical for B+ Tree range queries.
+    int parent;         // Pointer to the parent node. Facilitates upward traversal during splits.
 
-    int keys[ORDER - 1]; // مصفوفة الأرقام (المفاتيح)
+    // Padding / Alignment:
+    // Ensures the total struct size is exactly 4096 bytes (PAGE_SIZE).
+    // This is crucial for calculating precise offsets during 'fseek' operations.
+    char padding[PAGE_SIZE - sizeof(int)*5 - sizeof(int)*(ORDER-1) - sizeof(int)*ORDER]; 
 
-    // في النود الداخلية: هذه تشير إلى النودات الأبناء
-    // في النود الورقية: هذه قد لا نستخدمها أو نستخدمها للإشارة للداتا
-    int children[ORDER];
-
-    int next_leaf; // مؤشر للنود التالية (مهم جداً للـ B+ Tree Leaf Linking)
-    int parent;    // مؤشر للأب (يسهل عملية الـ Splitting جداً)
 } Node;
 
-// 3. هيكل المعلومات الأساسية (Metadata)
-// هذا سيتم تخزينه في أول مكان في الملف (Block 0)
-// لكي نعرف دائماً أين الروت وأين نكتب النود الجديدة
-typedef struct
-{
-    int root_node_id; // أين يقع الروت؟
-    int next_free_id; // ما هو رقم النود الفارغة التالية للكتابة فيها؟
+// 3. File Metadata (Header)
+// Reserved for the first block (Block 0) of the file.
+// Stores essential state information such as the Root location and Allocator status.
+typedef struct {
+    int root_node_id;       // The ID (offset index) of the current Root node.
+    int next_free_id;       // The ID of the next available slot for writing a new node.
 } TreeHeader;
 
 #endif
