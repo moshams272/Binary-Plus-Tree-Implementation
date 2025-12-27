@@ -129,3 +129,12 @@ void delete_node(int node_id) {
     
     printf("Node %d has been cleared (soft deleted).\n", node_id);
 }
+
+/*
+[ FILE ON DISK ]
+-----------------------------------------------------------------
+|  HEADER  |  NODE 0  |  NODE 1  |  NODE 2  | ... |  NODE N  |
+-----------------------------------------------------------------
+^          ^          ^
+Offset 0   Offset X   Offset Y
+*/
