@@ -109,4 +109,32 @@ void update_header(TreeHeader header) {
     fflush(fp);
 }
 
+/**
+ * 6. Delete Node (Soft Delete)
+ * Clears the data of a specific node.
+ * Note: Physically shifting data in binary files is inefficient. 
+ * Instead, we overwrite the location with an empty/zeroed structure.
+ */
+void delete_node(int node_id) {
+    Node empty_node;
+    
+    // Zero out the memory structure using memset
+    memset(&empty_node, 0, sizeof(Node));
+    
+    // Mark ID as -1 to explicitly indicate a deleted or empty state
+    empty_node.id = -1; 
 
+    // Overwrite the existing data with the empty node structure
+    write_node(node_id, &empty_node);
+    
+    printf("Node %d has been cleared (soft deleted).\n", node_id);
+}
+
+/*
+[ FILE ON DISK ]
+-----------------------------------------------------------------
+|  HEADER  |  NODE 0  |  NODE 1  |  NODE 2  | ... |  NODE N  |
+-----------------------------------------------------------------
+^          ^          ^
+Offset 0   Offset X   Offset Y
+*/
