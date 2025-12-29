@@ -75,11 +75,11 @@ python server.py
 
 - A B+ tree web page with two functions `search` and `insert`:
 
-![alt text](image.png)
+![B+ tree controls](<B+ tree controls.png>)
 
 - A simple visualization for the operation and the B+ tree:
 
-![alt text](image-1.png)
+![B+ tree visualization](<B+ tree visualization.png>)
 ---
 
 ## 🗑 Resetting the Data
