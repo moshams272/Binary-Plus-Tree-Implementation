@@ -4,7 +4,7 @@
 using namespace std;
 
 
-int create_node(Node* node, bool is_leaf) {
+int create_node(Node* node, int is_leaf) {
     TreeHeader header = read_header();
     int id = header.next_free_id++;
 
@@ -204,7 +204,7 @@ void insert(int key) {
         root.keys[0] = key;
         root.num_keys = 1;
         
-        // CRITICAL FIX: Re-read the header to get the updated next_free_id
+        // Re-read the header to get the updated next_free_id
         // before setting the root_id and saving.
         header = read_header(); 
         header.root_node_id = root_id;

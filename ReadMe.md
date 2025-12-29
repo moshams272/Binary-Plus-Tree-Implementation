@@ -1,114 +1,87 @@
-# 🌳 Disk-Based B+ Tree Manager (CGI Project)
+# B+ Tree Disk-Based Visualization (CGI)
 
-A C++ project to manage a B+ Tree structure stored on disk, featuring a Web Interface (HTML) connected via CGI (Common Gateway Interface).
+## 📖 About The Project
 
-## 📋 Prerequisites
-Before you begin, ensure you have the following installed:
+This project is a **Disk-Based B+ Tree** implementation written in **C++** that utilizes a **Common Gateway Interface (CGI)** to visualize the tree structure in a web browser.
 
-1.  **C++ Compiler (G++):** MinGW-w64 is recommended (via MSYS2).
-2.  **Python:** Required to run the local CGI server.
-3.  **Visual Studio Code:** Recommended code editor.
-4.  **Git:** To clone the repository.
+Unlike a standard in-memory tree, this implementation persists data to a binary file (`tree.dat`), simulating how actual database systems (like MySQL or SQLite) store indexes on a hard drive using fixed-size pages (4096 bytes).
 
----
+### Key Features
 
-## 🚀 Setup & Installation
-
-### 1. Clone the Repository
-Open your terminal in the desired folder and run:
-```bash
-git clone <YOUR_REPO_URL_HERE>
-cd <YOUR_PROJECT_FOLDER_NAME>
-
-```
-
-### 2. Verify Directory Structure
-
-Ensure your files are organized exactly as follows for the server to work correctly:
-
-```text
-Project/
-├── common.h            # Shared struct definitions
-├── functions.h         # Function prototypes
-├── index.html          # Frontend interface
-├── server.py           # Python local server script
-├── README.md           # This file
-└── cgi-bin/            # ⚠️ CRITICAL FOLDER
-    ├── main_cgi.cpp    # Frontend-to-Backend logic
-    └── btree_dummy.cpp # (Or your actual logic files later)
-
-```
+* **B+ Tree Structure:** Implements a B+ Tree of **Order 5**.
+* **Disk Persistence:** Nodes are saved to `tree.dat`. If you restart the server, your data remains.
+* **Web Interface:** A clear HTML interface to Insert and Search for keys.
+* **Visual Debugging:** The C++ backend generates HTML to visually render the tree nodes, distinguishing between Internal Nodes (orange) and Leaf Nodes (green).
 
 ---
 
-## 🛠️ Compilation
+## 📂 File Structure
 
-**Important:** Browsers cannot run `.cpp` files directly. You must compile them into an executable inside the `cgi-bin` folder.
-
-1. Open the Terminal in VS Code.
-2. Navigate to the `cgi-bin` folder:
-```bash
-cd cgi-bin
-
-```
-
-
-3. Compile the interface code with the logic code:
-```bash
-g++ main_cgi.cpp btree_dummy.cpp -o tree_app.exe
-
-```
-
-
-*(Note: As you progress, replace `btree_dummy.cpp` with your actual implementation files, e.g., `storage.cpp` or `btree_logic.cpp`).*
+* **`index.html`**: The entry point. A web form to input values and select "Insert" or "Search".
+* **`server.py`**: A Python script that acts as the web server. It handles the CGI requests and automatically opens your browser.
+* **`common.h`**: Configuration file. Defines `Page Size`, `Tree Order`, and the `Node` structure.
+* **`functions.h`**: Header file containing function declarations.
+* **`storage.cpp`**: Handles low-level file I/O (reading/writing binary pages to disk).
+* **`b+_tree.cpp`**: Contains the core B+ Tree logic (splitting nodes, finding leaves, inserting keys).
+* **`main_cgi.cpp`**: The bridge between the web and C++. It reads URL parameters, executes tree operations, and outputs HTML code.
 
 ---
 
-## ▶️ Running the Application
+## ⚙️ Prerequisites
 
-1. Go back to the main project folder:
+To run this project, you need:
+
+1. **C++ Compiler**: GCC (MinGW for Windows) or Clang.
+2. **Python 3.x**: To run the local server.
+
+---
+
+## 🚀 How to Setup and Run
+
+### Step 1: Compile the C++ Code
+
+Open your terminal/command prompt in the project root directory. Run the following command to compile the C++ files into the `cgi-bin` folder:
+
+**For Windows (MinGW):**
+
 ```bash
-cd ..
-
+g++ main_cgi.cpp storage.cpp dommy.cpp -o cgi-bin/tree_app.exe
 ```
 
+**For Linux/Mac:**
 
-2. Start the Python server:
+```bash
+g++ main_cgi.cpp storage.cpp dommy.cpp -o cgi-bin/tree_app.exe
+```
+
+### Step 2: Run the Server
+
+In the terminal (still in the project root), run the Python server script:
+
 ```bash
 python server.py
-
 ```
 
+### Step 3: Use the Application
 
-3. Your default browser should open automatically at `http://localhost:8080/index.html`.
-4. Try performing an **Insert**, **Search**, or **Delete** operation.
-
----
-
-## 👨‍💻 Team Workflow
-
-* **Person 1 (Frontend):** Works on `index.html` and `main_cgi.cpp`.
-* **Person 2 (Storage):** Creates and implements `storage.cpp` (File I/O).
-* **Team (Logic):** Works on the B+ Tree logic files.
-
-**⚠️ Integration Note:**
-When a team member finishes a real function (e.g., the actual `insert` logic), remove the "Mock" function from `btree_dummy.cpp` and include the real `.cpp` file in the compilation command.
+1. The script should automatically open `http://localhost:8080/index.html` in your default browser.
+2. Enter a number (e.g., `10`) and click **Do**.
+3. The page will reload showing the B+ Tree structure.
+4. Keep inserting numbers (e.g., `20`, `5`, `15`, `30`) to see the tree split and grow.
 
 ---
 
-## 🔧 Troubleshooting
+### Results:
 
-**1. Error: `fatal error: bits/requires_hosted.h**`
-This means your G++ installation is missing some headers.
+- A B+ tree web page with two functions `search` and `insert`:
 
-* Open **MSYS2 MinGW 64-bit** terminal.
-* Run: `pacman -S mingw-w64-x86_64-toolchain`.
+![alt text](image.png)
 
-**2. Browser downloads a file instead of showing the page**
+- A simple visualization for the operation and the B+ tree:
 
-* Ensure `tree_app.exe` exists inside the `cgi-bin` folder.
-* Ensure you are running the server using `python server.py`, not just opening the HTML file directly.
+![alt text](image-1.png)
+---
 
-**3. How to stop the server?**
+## 🗑 Resetting the Data
 
-* Press `Ctrl + C` in the terminal where Python is running.
+To clear the database and start with an empty tree, simply delete the **`tree.dat`** file that appears in your project folder after running the app. A new one will be created automatically on the next insert.

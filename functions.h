@@ -8,7 +8,7 @@ void insert(int key);
 void insert_into_parent(int left_id, int key, int right_id);
 int search(int key);
 void print_tree();
-int create_node(Node* node, bool is_leaf);
+int create_node(Node* node, int is_leaf);
 int find_leaf(int key);
 void insert_into_leaf(Node* leaf, int key);
 void split_internal(int node_id, Node* node, int key, int right_id);
