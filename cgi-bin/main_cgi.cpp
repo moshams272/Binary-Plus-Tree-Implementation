@@ -38,37 +38,50 @@ int main()
         string valStr = getParam(query, "val");
         string opStr = getParam(query, "op");
 
-        if (!valStr.empty() && !opStr.empty())
+        if (!opStr.empty())
         {
-            int key = stoi(valStr);
-
-
-            if (opStr == "insert")
+            if (opStr == "print") 
             {
-                cout << "<h3>Insert:" << key << "</h3>";
-                insert(key);
+                cout << "<h3>🌲 Tree Visualization (Print Only)</h3>";
                 print_tree();
             }
-            else if (opStr == "search")
+            else 
             {
-                cout << "<h3>Search: " << key << "</h3>";
-                search(key);
-                print_tree();
-            }
-            else
-            {
-                cout << "<p style='color:red'>Error!! <br> We Don't Know That Process!!</p>";
+                if (!valStr.empty()) 
+                {
+                    int key = stoi(valStr);
+
+                    if (opStr == "insert")
+                    {
+                        cout << "<h3 style='color:green'>Insert: " << key << "</h3>";
+                        insert(key);
+                        print_tree();
+                    }
+                    else if (opStr == "search")
+                    {
+                        cout << "<h3 style='color:green'>Search: " << key << "</h3>";
+                        search(key);
+                        print_tree();
+                    }
+                    else
+                    {
+                        cout << "<p style='color:red'>Error!! <br> We Don't Know That Process!!</p>";
+                    }
+                }
+                else
+                {
+                    cout << "<p style='color:red'>Please Fill Data</p>";
+                }
             }
         }
         else
         {
-            cout << "<p>Please Fill Data</p>";
-            print_tree();
+            cout << "<p style='color:red'>Please Select an Operation.</p>";
         }
     }
     else
     {
-        cout << "<p>There is no data sent.</p>";
+        cout << "<p style='color:red'>There is no data sent.</p>";
     }
 
     cout << "<br><a href='../index.html'><button>Return</button></a>";

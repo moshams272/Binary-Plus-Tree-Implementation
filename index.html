@@ -15,7 +15,7 @@
 <body>
     <div class="container">
         <h1>B+ Tree</h1>
-        <form action="/cgi-bin/tree_app.exe" method="GET">
+        <form action="/cgi-bin/tree_app.exe" method="GET" novalidate>
             <div>
                 <label>Value: </label>
                 <input type="number" name="val" required placeholder="Enter value">
@@ -26,6 +26,7 @@
                 <select name="op">
                     <option value="insert">Insert</option>
                     <option value="search">Search</option>
+                    <option value="print">Print</option>
                 </select>
             </div>
             <br>
